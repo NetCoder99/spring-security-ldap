@@ -1,5 +1,6 @@
 package com.john.spring_security_ldap.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,11 +14,10 @@ import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAu
 @EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	// ldap://100.36.224.125:389/dc=springframework,dc=org
-
+    @Autowired
+    private AuthEntryPoint authEntryPoint;
+    
 	private String ldapUrl = "ldap://192.168.0.6:389";
-	// private String ldapPort = "389";
-	// private String baseDn = "DC=mydomain,DC=com";
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -26,51 +26,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/version").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/login/**").permitAll()
+				.antMatchers("/versionSecure").authenticated()
 				.anyRequest().fullyAuthenticated()
-				.and().httpBasic();
-				//.defaultSuccessUrl("/versionSecure", true);
+				.and().httpBasic()
+				.authenticationEntryPoint(authEntryPoint);
 	}
 
-	@Bean
-	public ActiveDirectoryLdapAuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
-		ActiveDirectoryLdapAuthenticationProvider activeDir = new ActiveDirectoryLdapAuthenticationProvider(null, ldapUrl);
-		return activeDir;
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) {
+		String customSearchFilter = "(&(objectClass=user)(sAMAccountName={1}))";
+	    ActiveDirectoryLdapAuthenticationProvider adProvider =
+	            new ActiveDirectoryLdapAuthenticationProvider("mydomain.com", ldapUrl);
+	    adProvider.setSearchFilter(customSearchFilter);
+	    adProvider.setConvertSubErrorCodesToExceptions(true);
+	    adProvider.setUseAuthenticationRequestCredentials(true);
+	    auth.authenticationProvider(adProvider);
 	}
-	
-//  @Override
-//  protected void configure(HttpSecurity http) throws Exception {
-//    http
-//      .authorizeRequests()
-//        .anyRequest().fullyAuthenticated()
-//        .and()
-//      .formLogin();
-//  }
-//
-//  @Override
-//  public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//    auth
-//      .ldapAuthentication()
-//        .userDnPatterns("uid={0},ou=people")
-//        .groupSearchBase("ou=groups")
-//        .contextSource()
-//          .url("ldap://localhost:8389/dc=springframework,dc=org")
-//          .and()
-//        .passwordCompare()
-//          //.passwordEncoder(new BCryptPasswordEncoder())
-//          .passwordAttribute("userPassword");
-//  }
-//  
-//  
 
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
 }
