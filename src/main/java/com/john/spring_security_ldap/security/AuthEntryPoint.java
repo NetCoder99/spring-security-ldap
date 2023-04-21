@@ -34,12 +34,12 @@ public class AuthEntryPoint implements AuthenticationEntryPoint, AccessDeniedHan
 		
 		//logger.info("AuthEntryPoint.commence:" + authException.getMessage());
 		if (authException instanceof InsufficientAuthenticationException) {
-			logger.info("AuthEntryPoint.commence:" + authException.getMessage());
+			logger.warn("AuthEntryPoint.commence:" + authException.getMessage());
 		    //response.sendError(400, authException.getMessage());
 		}
 		if (authException instanceof BadCredentialsException) {
-			logger.info("AuthEntryPoint.commence:" + authException.getMessage());
-			logger.info("AuthEntryPoint.commence:" + authException.getCause().getMessage());
+			logger.warn("AuthEntryPoint.commence:" + authException.getMessage());
+			logger.warn("AuthEntryPoint.commence:" + authException.getCause().getMessage());
 		    //response.sendError(400, authException.getMessage());
 		}
 
