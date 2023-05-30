@@ -1,53 +1,85 @@
-dn: dc=breadcrumbdata,dc=com
+dn: dc=flaskldap,dc=com
 objectClass: top
 objectClass: domain
+dc: flaskldap
 
-dn: ou=users,dc=breadcrumbdata,dc=com
+dn: ou=users,dc=flaskldap,dc=com
 objectclass: top
 objectclass: organizationalUnit
 ou: users
 
-dn: ou=groups,dc=breadcrumbdata,dc=com
+dn: ou=groups,dc=flaskldap,dc=com
 objectclass: top
 objectclass: organizationalUnit
 ou: groups
 
-dn: cn=ldapgroup1,ou=groups,dc=breadcrumbdata,dc=com
+
+dn: cn=ldapgroup1,ou=groups,dc=flaskldap,dc=com
 objectClass: groupOfNames
 cn: ldapgroup1
-member: uid=paul,ou=users,dc=breadcrumbdata,dc=com
-member: uid=bob,ou=users,dc=breadcrumbdata,dc=com
+member: uid=paul,ou=users,dc=flaskldap,dc=com
+member: uid=bob,ou=users,dc=flaskldap,dc=com
 
-dn: uid=paul,ou=users,dc=breadcrumbdata,dc=com
+
+dn: cn=ldapgroup2,ou=groups,dc=flaskldap,dc=com
+objectClass: groupOfNames
+cn: ldapgroup2
+member: uid=john,ou=users,dc=flaskldap,dc=com
+
+dn: uid=paul,ou=users,dc=flaskldap,dc=com
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
 cn: chris paul
 sn: chris
+givenName: paul
 uid: paul
-userPassword: 123
+mail: paul_chris@nowhere.com
+userPassword: password
+#mamberOf: cn=ldapgroup2,ou=groups,dc=breadcrumbdata,dc=com
 
-
-dn: uid=bob,dc=breadcrumbdata,dc=com
+dn: uid=bob,ou=users,dc=flaskldap,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Bob Hamilton
 sn: Hamilton
+givenName: Bob
 uid: bob
-userPassword: bobspassword
+mail: bob_hamilton@nowhere.com
+userPassword: password
 
-dn: uid=john,dc=breadcrumbdata,dc=com
+dn: uid=john,ou=users,dc=flaskldap,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: John Smith
 sn: Smith
+givenName: John
 uid: john
-userPassword: johnspassword
+mail: john_smith@nowhere.com
+userPassword: password
+
+dn: cn=developers,ou=groups,dc=flaskldap,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: developers
+ou: developer
+uniqueMember: uid=john,ou=users,dc=breadcrumbdata,dc=com
+uniqueMember: uid=bob,ou=users,dc=flaskldap,dc=com
+uniqueMember: uid=paul,ou=users,dc=flaskldap,dc=com
+
+
+dn: cn=admins,ou=groups,dc=flaskldap,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: managers
+ou: manager
+uniqueMember: uid=john,ou=users,dc=breadcrumbdata,dc=com
+
 
 
 
